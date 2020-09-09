@@ -1,0 +1,83 @@
+name: New Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Candidate full name.'
+        required: true
+      handle:
+        description: 'Candidate Github handle.'
+        required: true
+      gist:
+        description: 'Candidate gist identifier.'
+        required: true
+
+jobs:
+  create-repo:
+    name: "Setup Candidate Repository"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create repository
+        uses: actions/github-script@v3
+        id: create-repo
+        with:
+          github-token: ${{secrets.ADMIN_GITHUB_TOKEN}}
+          result-encoding: string
+          script: |
+            const repoName = "${{github.event.inputs.name}}".replace(/\s+/g, '-').toLowerCase();
+            await github.repos.createUsingTemplate({
+              template_owner: context.repo.owner,
+              template_repo: context.repo.repo,
+              name: repoName,
+              owner: context.repo.owner,
+              private: true
+            });
+            await github.repos.replaceAllTopics({
+              owner: context.repo.owner,
+              repo: repoName,
+              names: ['web-candidate'],
+            });
+            const { data: issues } = await github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+              sort: 'created',
+              direction: 'asc',
+            });
+            await issues.filter(issue => !issue.pull_request).reduce((promise, issue) => {
+              return promise.then(() => github.issues.create({
+                owner: context.repo.owner,
+                repo: repoName,
+                title: issue.title,
+                body: issue.body,
+                labels: issue.labels.map(l => l.name),
+              }));
+            }, Promise.resolve());
+            await github.repos.update({
+              owner: context.repo.owner,
+              repo: repoName,
+              delete_branch_on_merge: true
+            });
+            await github.repos.updateBranchProtection({
+              owner: context.repo.owner,
+              repo: repoName,
+              branch: 'master',
+              enforce_admins: false,
+              required_status_checks: null,
+              required_pull_request_reviews: null,
+              restrictions: {
+                users: [],
+                teams: []
+              }
+            });
+            await github.repos.addCollaborator({
+              owner: context.repo.owner,
+              repo: repoName,
+              username: "${{github.event.inputs.handle}}",
+            });
+            await github.gists.createComment({
+              gist_id: "${{github.event.inputs.gist}}",
+              body: `Hi \${{github.event.inputs.name}}! Your assignment is ready: https://github.com/${context.repo.owner}/${repoName}/issues. Have fun!`,
+            });
