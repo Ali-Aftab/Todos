@@ -1,8 +1,5 @@
 import React, { memo } from "react";
 import { AppBar, Toolbar, Typography, Paper } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import IconButton from "@material-ui/core/IconButton";
-import InputBase from "@material-ui/core/InputBase";
 import Scenario from "./Scenario";
 
 const Layout = memo((props) => (
