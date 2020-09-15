@@ -46,8 +46,12 @@ const useTodos = () => {
     removeTodo
   );
   const todos = data?.listTodos || [];
+
+  const [searchResult, setSearchResult] = useState(todos);
+
   return {
     todos,
+    searchResult,
     addTodo: async (text) => {
       try {
         await useAddTodoMutation({
@@ -71,6 +75,14 @@ const useTodos = () => {
         variables: { text },
       });
       await refetch();
+    },
+    searchTodo: (text) => {
+      const filterResult = todos.filter((todoItem) => {
+        const itemName = todoItem.text;
+        return itemName.indexOf(text) != -1;
+      });
+      setSearchResult(filterResult);
+      return filterResult;
     },
   };
 };
