@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
+import client from "../api";
 const listTodos = gql`
   query listTodos {
     listTodos {
@@ -47,34 +48,74 @@ const useTodos = () => {
   );
   const todos = data?.listTodos || [];
 
+  const graphQLTask = { __typename: `Query`, listTodos: todos };
+  const cacheID = client.cache.identify(graphQLTask);
+
   const [searchResult, setSearchResult] = useState(todos);
 
   return {
     todos,
     searchResult,
     addTodo: async (text) => {
+      let apiFail = false;
       try {
         await useAddTodoMutation({
           variables: { text },
         });
       } catch (error) {
+        apiFail = true;
         return errorResponseFeedback(error);
       }
-      await refetch();
+      if (!apiFail) {
+        const newTask = { text, checked: false };
+        client.writeQuery({
+          query: listTodos,
+          data: {
+            listTodos: [...data.listTodos, newTask],
+          },
+        });
+      }
     },
     checkTodo: async (idx) => {
-      const { text } = todos[idx];
+      const { text, checked } = todos[idx];
       await useCheckTodoMutation({
         variables: { text },
       });
-      await refetch();
+
+      let updateCheck = true;
+      if (checked === true) {
+        updateCheck = false;
+      }
+
+      const updateTask = { text, checked: updateCheck };
+      const updateList = [...todos];
+      updateList[idx] = updateTask;
+
+      client.cache.modify({
+        id: cacheID,
+        fields: {
+          listTodos() {
+            return updateList;
+          },
+        },
+      });
     },
     removeTodo: async (idx) => {
       const { text } = todos[idx];
       await useRemoveTodoMutation({
         variables: { text },
       });
-      await refetch();
+
+      let updateList = [...todos];
+
+      client.cache.modify({
+        id: cacheID,
+        fields: {
+          listTodos() {
+            return updateList.filter((task) => task.text !== text);
+          },
+        },
+      });
     },
     searchTodo: (text) => {
       const filterResult = todos.filter((todoItem) => {
