@@ -2,6 +2,10 @@
 
 This is a React-based To-Do List application. It allows the user to create, delete, and search tasks.
 
+<p align="center">
+            <img src="/public/ReadMePhoto.png" width="50%" height="50%" >
+</p>
+
 ## Requirements
 
 You need [Node.js/NPM](https://nodejs.org/) and [Git](https://git-scm.com/) installed into your system. Note: NPM is bundled with Node.js
