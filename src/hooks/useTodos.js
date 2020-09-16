@@ -33,10 +33,20 @@ const removeTodo = gql`
     }
   }
 `;
-const errorResponseFeedback = (error) => ({
-  response: "error",
-  message: error.graphQLErrors[0].message,
-});
+const errorResponseFeedback = (error) => {
+  if (error.graphQLErrors && error.graphQLErrors[0]) {
+    return {
+      response: "error",
+      message: error.graphQLErrors[0].message,
+    };
+  } else {
+    return {
+      response: "error",
+      message: "Error occured with API",
+    };
+  }
+};
+
 const useTodos = () => {
   const { data, loading, error, refetch } = useQuery(listTodos);
   const [useAddTodoMutation, addTodoMutationResult] = useMutation(addTodo);
@@ -68,10 +78,11 @@ const useTodos = () => {
       }
       if (!apiFail) {
         const newTask = { text, checked: false };
+        console.log(todos);
         client.writeQuery({
           query: listTodos,
           data: {
-            listTodos: [...data.listTodos, newTask],
+            listTodos: [...todos, newTask],
           },
         });
       }

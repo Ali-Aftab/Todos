@@ -1,64 +1,70 @@
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
 
-import AddTodo from './AddTodo';
+import AddTodo from "./AddTodo";
 
-describe('AddTodo', () => {
-  it('should render without errors', async () => {
-    render(<AddTodo />);
+let props = { scenario: "Add" };
 
-    const field = await screen.findByPlaceholderText('Add Todo here');
-    const button = await screen.findByTestId('add-todo-button');
+describe("AddTodo", () => {
+  it("should render without errors", async () => {
+    render(<AddTodo scenario={props.scenario} />);
 
-    expect(field).toHaveValue('');
-    expect(button).toHaveTextContent('Add');
+    const field = await screen.findByPlaceholderText("Add Todo here");
+    const button = await screen.findByTestId("add-todo-button");
+
+    expect(field).toHaveValue("");
+    expect(button).toHaveTextContent("Add");
   });
 
-  it('should accept input without errors', async () => {
-    render(<AddTodo inputValue="add test data" />);
+  it("should accept input without errors", async () => {
+    render(<AddTodo inputValue="add test data" scenario={props.scenario} />);
 
-    const field = await screen.findByPlaceholderText('Add Todo here');
-    const button = await screen.findByTestId('add-todo-button');
+    const field = await screen.findByPlaceholderText("Add Todo here");
+    const button = await screen.findByTestId("add-todo-button");
 
-    expect(field).toHaveValue('add test data');
-    expect(button).toHaveTextContent('Add');
+    expect(field).toHaveValue("add test data");
+    expect(button).toHaveTextContent("Add");
   });
 
-  it('should trigger text change', async () => {
+  it("should trigger text change", async () => {
     let called = 0;
     const handleInputChange = () => {
       called++;
     };
 
-    render(<AddTodo onInputChange={handleInputChange} />);
+    render(
+      <AddTodo onInputChange={handleInputChange} scenario={props.scenario} />
+    );
 
-    const field = await screen.findByPlaceholderText('Add Todo here');
+    const field = await screen.findByPlaceholderText("Add Todo here");
 
     fireEvent.change(field, {
-      target: { value: 'a' },
+      target: { value: "a" },
     });
 
     fireEvent.change(field, {
-      target: { value: 'ab' },
+      target: { value: "ab" },
     });
 
     fireEvent.change(field, {
-      target: { value: 'abc' },
+      target: { value: "abc" },
     });
 
     expect(called).toEqual(3);
-    expect(field).toHaveValue('abc');
+    expect(field).toHaveValue("abc");
   });
 
-  it('should accept input without errors', async () => {
+  it("should accept input without errors", async () => {
     let called = 0;
     const handleButtonClick = () => {
       called++;
     };
 
-    render(<AddTodo onButtonClick={handleButtonClick} />);
+    render(
+      <AddTodo onButtonClick={handleButtonClick} scenario={props.scenario} />
+    );
 
-    const button = await screen.findByTestId('add-todo-button');
+    const button = await screen.findByTestId("add-todo-button");
 
     fireEvent.click(button);
 
