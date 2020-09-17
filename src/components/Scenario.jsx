@@ -12,10 +12,10 @@ const Scenario = (props) => {
       onChange={props.handleScenario}
       aria-label="Scenario"
     >
-      <ToggleButton value="Add">
+      <ToggleButton value="Add" data-testid="add-scenario-button">
         <PostAddIcon />
       </ToggleButton>
-      <ToggleButton value="Search">
+      <ToggleButton value="Search" data-testid="search-scenario-button">
         <FindInPageIcon />
       </ToggleButton>
     </ToggleButtonGroup>
