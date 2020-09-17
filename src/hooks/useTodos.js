@@ -66,6 +66,7 @@ const useTodos = () => {
   return {
     todos,
     searchResult,
+    errorResponseFeedback,
     addTodo: async (text) => {
       let apiFail = false;
       try {

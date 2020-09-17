@@ -90,4 +90,17 @@ describe("useTodos", () => {
       expect(filterList).toStrictEqual([{ text: "hello", checked: false }]);
     });
   });
+
+  it("should provide error response feedback.", async () => {
+    const { result } = renderHook(() => useTodos(), { wrapper });
+
+    expect(
+      result.current.errorResponseFeedback({
+        graphQLErrors: [{ message: "You got an expected error" }],
+      })
+    ).toStrictEqual({
+      response: "error",
+      message: "You got an expected error",
+    });
+  });
 });
