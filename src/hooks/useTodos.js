@@ -78,7 +78,6 @@ const useTodos = () => {
       }
       if (!apiFail) {
         const newTask = { text, checked: false };
-        console.log(todos);
         client.writeQuery({
           query: listTodos,
           data: {
