@@ -19,4 +19,4 @@ afterAll(() => {
   // Clean up once the tests are done.
   server.close();
 });
-jest.setTimeout(12000);
+jest.setTimeout(30000);
