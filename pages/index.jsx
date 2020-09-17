@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import ReactDOM from "react-dom";
-import { useInputValue, useTodos, useScenario } from "../src/hooks";
+import { useInputValue, useTodos, useScenario, usePopup } from "../src/hooks";
 import Layout from "../src/components/Layout";
 import AddTodo from "../src/components/AddTodo";
 import TodoList from "../src/components/TodoList";
@@ -15,10 +15,14 @@ const TodoApp = memo((props) => {
     removeTodo,
     searchTodo,
   } = useTodos();
+  const {
+    errorMessage,
+    setErrorMessage,
+    isError,
+    setisError,
+    closePopup,
+  } = usePopup();
   const { scenario, handleScenario } = useScenario();
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isError, setisError] = useState(false);
 
   let items = todos;
   let onButtonClick = clearInputAndAddTodo;
@@ -30,9 +34,6 @@ const TodoApp = memo((props) => {
       setisError(true);
       setErrorMessage(addTodoRes.message);
     }
-  };
-  const closePopup = (event, reason) => {
-    setisError(false);
   };
 
   const searchInput = () => {
