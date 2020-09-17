@@ -17,17 +17,6 @@ let items = [
     checked: true,
   },
 ];
-// let onItemRemove = (idx) => {
-//   items.splice(idx, 1);
-// };
-// let onItemCheck = (idx) => {
-//   const task = items[idx];
-//   if (task[idx] === true) {
-//     task[idx] = false;
-//   } else {
-//     task[idx] = true;
-//   }
-// };
 
 describe("TodoList", () => {
   it("should render without errors", async () => {
@@ -37,8 +26,4 @@ describe("TodoList", () => {
 
     expect(typeof renderResult).toEqual("object");
   });
-
-  //   it("should remove item from list", async () => {
-  //     render(<TodoList items={items} onItemCheck={onItemRemove} />)
-  //   });
 });

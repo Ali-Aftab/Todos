@@ -34,6 +34,11 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <meta
+            id="meta-description"
+            name="description"
+            content="This is a React-based To-Do List application. It allows the user to create, delete, and search tasks."
+          />
         </Head>
         <body>
           <Main />
