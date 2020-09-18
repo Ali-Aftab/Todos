@@ -25,7 +25,6 @@ const TodoApp = memo((props) => {
   const { scenario, handleScenario } = useScenario();
 
   let items = todos;
-  let onButtonClick = clearInputAndAddTodo;
 
   const clearInputAndAddTodo = async (_) => {
     clearInput();
@@ -43,6 +42,7 @@ const TodoApp = memo((props) => {
       setErrorMessage("There are no results matched to your query!");
     }
   };
+  let onButtonClick = clearInputAndAddTodo;
 
   if (scenario === "Search") {
     onButtonClick = searchInput;
@@ -53,13 +53,18 @@ const TodoApp = memo((props) => {
   }
 
   return (
-    <Layout scenario={scenario} handleScenario={handleScenario}>
+    <Layout
+      scenario={scenario}
+      handleScenario={handleScenario}
+      data-testid="layout-app"
+    >
       <AddTodo
         inputValue={inputValue}
         onInputChange={changeInput}
         onButtonClick={onButtonClick}
         onInputKeyPress={(event) => keyInput(event, onButtonClick)}
         scenario={scenario}
+        data-testid="func-form"
       />
       <ErrorPopup
         isError={isError}
@@ -70,6 +75,7 @@ const TodoApp = memo((props) => {
         items={items}
         onItemCheck={(idx) => checkTodo(idx)}
         onItemRemove={(idx) => removeTodo(idx)}
+        data-testid="todo-list"
       />
     </Layout>
   );

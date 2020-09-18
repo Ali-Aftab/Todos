@@ -32,6 +32,20 @@ describe("useTodos", () => {
     ]);
   });
 
+  it("shouldn't allow user to add todos the same task.", async () => {
+    const { result, waitForNextUpdate } = renderHook(() => useTodos(), {
+      wrapper,
+    });
+
+    await act(async () => {
+      await result.current.addTodo("hello");
+    });
+
+    expect(result.current.todos).toStrictEqual([
+      { text: "hello", checked: false },
+    ]);
+  });
+
   it("should check/uncheck todos correctly", async () => {
     const { result, waitForNextUpdate } = renderHook(() => useTodos(), {
       wrapper,
@@ -91,7 +105,7 @@ describe("useTodos", () => {
     });
   });
 
-  it("should provide error response feedback.", async () => {
+  it("should provide error response feedback when the user receives a graphql error.", async () => {
     const { result } = renderHook(() => useTodos(), { wrapper });
 
     expect(
@@ -101,6 +115,15 @@ describe("useTodos", () => {
     ).toStrictEqual({
       response: "error",
       message: "You got an expected error",
+    });
+  });
+
+  it("should provide error response feedback when the user receives an error unrelated to graphql.", async () => {
+    const { result } = renderHook(() => useTodos(), { wrapper });
+
+    expect(result.current.errorResponseFeedback("error")).toStrictEqual({
+      response: "error",
+      message: "Error occured with API",
     });
   });
 });
