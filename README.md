@@ -1,6 +1,6 @@
-# TODO APP (ali-aftab)
+# TODOS APP (ali-aftab)
 
-This is a React-based To-Do List application. It allows the user to create, delete, and search tasks.
+This is a To-Do List application that allows the user to create, delete, and search tasks. The app was made with React, Next-JS, GraphQL, Apollo, etc.
 
 <p align="center">
             <img src="/public/ReadMePhoto.png" width="50%" height="50%" >
@@ -12,12 +12,11 @@ You need [Node.js/NPM](https://nodejs.org/) and [Git](https://git-scm.com/) inst
 
 ## Get Started
 
-There are two ways to run this application:
-
-1. In your terminal type `git clone https://github.com/bellhops/ali-aftab`
-2. Access the folder with `cd ali-aftab`
-3. Install the required modules with `npm install`
-4. There are two ways to run this application:
+1. Fork this repo to your personal
+2. In your terminal type `git clone https://github.com/(YOURGITHUBPROFILE)/Todos`
+3. Access the folder with `cd Todos`
+4. Install the required modules with `npm install`
+5. There are two ways to run this application:
 
 - **Development** mode - type `npm run dev` to run the developer mode of the application (enables hot-code reloading and error reporting)
 - **Production** mode - type `npm run build` to build the optimized production build of the application and then type `npm run start` to run the production build
