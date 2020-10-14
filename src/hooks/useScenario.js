@@ -7,7 +7,11 @@ const useScenario = (scenarioOption = "Add") => {
     scenario,
     setScenario,
     handleScenario: (event, newScenario) => {
-      setScenario(newScenario);
+      if (newScenario === null) {
+        setScenario("Add");
+      } else {
+        setScenario(newScenario);
+      }
     },
   };
 };
